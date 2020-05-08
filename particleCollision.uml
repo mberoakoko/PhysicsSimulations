@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>particleCollision</OriginalElement>
+  <nodes>
+    <node x="96.0" y="79.0">particleCollision.Quadtree</node>
+    <node x="0.0" y="158.0">particleCollision.Point</node>
+    <node x="165.0" y="0.0">particleCollision.sketch</node>
+    <node x="103.0" y="158.0">particleCollision.Circle</node>
+    <node x="213.0" y="158.0">particleCollision.Rectangle</node>
+    <node x="220.0" y="79.0">particleCollision.Particle</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="particleCollision.Circle" target="particleCollision.Quadtree">
+      <point x="0.0" y="-14.5" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="particleCollision.Particle" target="particleCollision.sketch">
+      <point x="0.0" y="-14.5" />
+      <point x="272.0" y="54.0" />
+      <point x="232.5" y="54.0" />
+      <point x="22.5" y="14.5" />
+    </edge>
+    <edge source="particleCollision.Rectangle" target="particleCollision.Quadtree">
+      <point x="0.0" y="-14.5" />
+      <point x="268.5" y="133.0" />
+      <point x="182.66666666666666" y="133.0" />
+      <point x="34.66666666666666" y="14.5" />
+    </edge>
+    <edge source="particleCollision.Point" target="particleCollision.Quadtree">
+      <point x="0.0" y="-14.5" />
+      <point x="41.5" y="133.0" />
+      <point x="113.33333333333334" y="133.0" />
+      <point x="-34.66666666666666" y="14.5" />
+    </edge>
+    <edge source="particleCollision.Quadtree" target="particleCollision.sketch">
+      <point x="0.0" y="-14.5" />
+      <point x="148.0" y="54.0" />
+      <point x="187.5" y="54.0" />
+      <point x="-22.5" y="14.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="1.0" x="162.0" y="93.5" />
+  <SelectedNodes />
+  <Categories />
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
