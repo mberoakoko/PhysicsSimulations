@@ -12,7 +12,7 @@ public class Quadtree extends sketch {
     boolean divide = false;
     float totalMass;
     PVector centerOfMass;
-    float Mass , nodeMass, theta;
+    float theta;
     Quadtree northeast;
     Quadtree northwest;
     Quadtree southeast;
@@ -24,8 +24,8 @@ public class Quadtree extends sketch {
         this.boundry = rect;
         this.capacity = cap;
         this.p5 = _p5;
-        this.Mass = 0;
-        this.nodeMass = 0;
+        this.theta = 0.0001F;
+        this.centerOfMass = new PVector(0, 0);
         points = new ArrayList<Point>();
     }
 
@@ -33,7 +33,6 @@ public class Quadtree extends sketch {
         if (!this.boundry.contains(p)) return false; //<>//
         if (this.points.size() < this.capacity) {
             this.points.add(p);
-            this.Mass = p.mass;
             return true;
         } else {
             if (!this.divide) {
@@ -45,7 +44,10 @@ public class Quadtree extends sketch {
                 return true;
             } else if (this.southeast.insert(p)) {
                 return true;
-            } else return this.southwest.insert(p);
+            } else if( this.southwest.insert(p)){
+                return true;
+            }
+            else return false;
         }
     }
 
@@ -105,29 +107,11 @@ public class Quadtree extends sketch {
     }
 
 
-    public float traverse(Quadtree tree) {
-        /*if (tree != null) {
-            float massNorthEast = traverse(tree.northeast);
-            float massNorthWest = traverse(tree.northwest);
-            float massSouthWest = traverse(tree.southwest);
-            float massSouthEast = traverse(tree.southeast);
-            if (tree.points.size() != 0) {
-                //Add all masses together
-                Mass = tree.points.get(0).mass;
-                Mass += (massNorthEast + massNorthWest + massSouthEast + massSouthWest);
-                System.out.println(Mass);
-
-            }
-        }*/
-        if(tree == null){
-            return  0;
-        }
-        if(tree.points.size()!=0){
-            Mass = tree.Mass + traverse(tree.northeast) + traverse(tree.northwest) + traverse(tree.southeast) + traverse(tree.southwest);
-            return  Mass;
-        }
-        return 0;
-    }
+    /**
+     * Sums up the Total mass of the tree
+     * This is a Scalar Quantity
+     * @param tree
+     */
     private float Add(Quadtree tree){
         if(tree == null){
             return 0;
@@ -137,14 +121,21 @@ public class Quadtree extends sketch {
         }
         return 0;
     }
+
+    /**
+     *
+     * @param tree
+     * @return total sum of (mass multiplied by the position of the particle)
+     */
     private PVector sumOfMass(Quadtree tree){
         if(tree == null){
             return new PVector(0, 0);
         }
-        if(tree.points.size()!= 0){
+        if(tree.points.size()!= 0) {
             PVector massRadius = new PVector((float) tree.points.get(0).x, (float) tree.points.get(0).y);
             massRadius = massRadius.mult(tree.points.get(0).mass);
-            return massRadius.add(sumOfMass(tree.northeast)).add(sumOfMass((tree.northwest))).add(sumOfMass(tree.southeast)).add(sumOfMass(tree.southwest));
+            massRadius = massRadius.add(sumOfMass(tree.northeast)).add(sumOfMass((tree.northwest))).add(sumOfMass(tree.southeast)).add(sumOfMass(tree.southwest));
+            return massRadius;
         }
         return new PVector(0, 0);
     }
@@ -165,7 +156,11 @@ public class Quadtree extends sketch {
     public void updateTree(Quadtree tree){
         if(tree != null){
             tree.totalMass = Add(tree);
-            tree.centerOfMass = sumOfMass(tree).mult(1/tree.totalMass);
+            if(tree.totalMass == 0 ){
+               // System.out.println("This is a hit");
+                tree.centerOfMass = new PVector(0, 0);
+            }
+            tree.centerOfMass = tree.centerOfMass.add(sumOfMass(tree).mult(1/tree.totalMass));
             updateTree(tree.northeast);
             updateTree(tree.northwest);
             updateTree(tree.southwest);
